@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
-// Admin Schema Or Document Structure
 const { SECRET_KEY } = require("../urls");
+
+// Admin Schema Or Document Structure
 
 const adminSchema = mongoose.Schema({
     email : {

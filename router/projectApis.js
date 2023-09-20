@@ -1,8 +1,6 @@
 const express = require('express');
 const project = express();
 const projectApis = express.Router();
-const { BASEURL } = require("../urls");
-
 const multer = require("multer");
 const path = require("path");
 const bcryptjs = require('bcryptjs');
@@ -11,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const Projects = require('../models/projectSchema');
 const Users = require('../models/volunteerSchema');
 const { default: mongoose } = require('mongoose');
+const { BASEURL } = require("../urls");
 
 //Methods to get data from frontend
 projectApis.use(express.json());
@@ -48,7 +47,7 @@ projectApis.post("/create", upload.single('projectCover'), async (req, res) => {
             serviceCategory,
             isActive
         } = req.body;
-        const projectCover = `${BASEURL}/profile/${req.file.filename}`;
+        const projectCover = `${BASEURL}profile/${req.file.filename}`;
 
         const createproject = new Projects({
             projectName: projectName,
@@ -180,9 +179,7 @@ projectApis.post("/getByVol", async (req, res) => {
             })
             if (volProjects && volProjects.length > 0) {
                 res.status(200).send(volProjects);
-            } else {
-                res.status(404).send("s Found")
-            }
+            } 
         }
     } catch (error) {
         res.status(400).json({ error: error.message });

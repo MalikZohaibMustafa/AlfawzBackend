@@ -9,7 +9,6 @@ const cookieParser = require('cookie-parser');
 const Rewards = require('../models/RewardSchema');
 const { BASEURL } = require("../urls");
 
-
 //Methods to get data from frontend
 volunteerApis.use(express.json());
 volunteerApis.use(express.urlencoded({ extended: true }));
@@ -107,7 +106,7 @@ volunteerApis.put("/updateVolunteer/:id", upload.single('profileImage'), async (
     try {
         let volunteer = null;
         if (req.file) {
-            const profileImage = `${BASEURL}/profile/${req.file.filename}`;
+            const profileImage = `${BASEURL}profile/${req.file.filename}`;
             volunteer = await Users.findOneAndUpdate({ _id: req.params.id }, { ...req.body, profileImage: profileImage }, { upsert: true });
         }
         else {

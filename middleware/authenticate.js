@@ -9,7 +9,6 @@ const authenticate = async (req,res,next)=>{
         const token =req.cookies.jwt;
         if(!token){
             res.status(401).send("No tokens");
-            console.log("No Tokens")
         }
         else{
             let verifyToken = jwt.verify(token, SECRET_KEY);
@@ -24,9 +23,8 @@ const authenticate = async (req,res,next)=>{
             if(!rootUser){
                 res.status(401).send("User not Found");
             }
-            else {
+            else{
                 res.status(200).send(rootUser);
-                return;  // This will exit the middleware and won't call next()
             }
         }
         next(); 

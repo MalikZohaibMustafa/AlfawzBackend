@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 // User Schema Or Document Structure
 
 const projectSchema = mongoose.Schema({
-
     projectName: {
         type: String,
         required: true,

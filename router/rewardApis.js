@@ -12,7 +12,6 @@ const Ngos = require("../models/ngoSchema");
 const Admin = require("../models/adminSchema");
 const { BASEURL } = require("../urls");
 
-
 rewardApis.use(express.json());
 rewardApis.use(express.urlencoded({ extended: true }));
 rewardApis.use(cookieParser());
@@ -99,9 +98,7 @@ rewardApis.post("/certificateRequest", async (req, res) => {
         if (data && data.length > 0) {
             res.status(200).send(data);
         }
-        else {
-            res.status(404).send("Not Found")
-        }
+       
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -167,7 +164,7 @@ rewardApis.get("/pointsRequest", async (req, res) => {
 rewardApis.put("/uploadCertificate", upload.single("certificate"), async (req, res) => {
     try {
         let rewardId = mongoose.Types.ObjectId(req.body.rewardId);
-        const certificate = `${BASEURL}/profile/${req.file.filename}`;
+        const certificate = `${BASEURL}profile/${req.file.filename}`;
         const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { certificate: certificate }, { new: true });
         if (reward) {
             res.status(200).send("Updated")

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 // User Schema Or Document Structure
-
 const rewardSchema = mongoose.Schema({
     volId : {
         type : String,

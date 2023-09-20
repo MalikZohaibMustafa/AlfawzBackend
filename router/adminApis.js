@@ -12,8 +12,6 @@ const { send } = require('process');
 const adminApis = express.Router();
 const { BASEURL } = require("../urls");
 
-
-
 adminApis.use(express.json());
 adminApis.use(express.urlencoded({ extended: true }));
 adminApis.use(cookieParser());
@@ -42,9 +40,9 @@ adminApis.post('/login', async (req, res) => {
         const password = req.body.password;
         //Find User if exist
         const user = await Admin.findOne({ email: email });
-        if (user) 
-        {
+        if (user) {
             //Verify password
+
             if (password === user.password) {
                 const token = await user.generateToken();
                 console.log(token);
@@ -295,18 +293,22 @@ adminApis.get("/about", async (req, res) => {
 
 adminApis.put("/updateCategory", async (req, res) => {
     try {
-        const { category } = req.body.category
-        const update = await Admin.findOneAndUpdate({ email: "admin" }, { $push: { serviceCategory: category } }, { upsert: true });
-        if (update) {
-            res.status(200).send(update);
-        }
-        else {
-            res.status(400).send("Bad Request");
-        }
+      const { category } = req.body;
+      const update = await Admin.findOneAndUpdate(
+        { email: "admin" },
+        { $push: { serviceCategory: category } },
+        { upsert: true }
+      );s
+      if (update) {
+        res.status(200).send(update);
+      } else {
+        res.status(400).send("Bad Request");
+      }
     } catch (error) {
-        res.status(400).json({ error: error.message });;
+      res.status(400).json({ error: error.message });
     }
-});
+  });
+  
 
 adminApis.post("/deleteCategory", async (req, res) => {
     try {
@@ -326,7 +328,7 @@ adminApis.post("/deleteCategory", async (req, res) => {
 adminApis.put("/updateMission", upload.single("image"), async (req, res) => {
     try {
         const { mission, description } = req.body;
-        const image = `${BASEURL}/profile/${req.file.filename}`;
+        const image = `${BASEURL}profile/${req.file.filename}`;
         const update = await Admin.findOneAndUpdate({ email: "admin" }, { image: image, mission: mission, description: description }, { new: true });
         if (update) {
             res.status(200).send("Updated")
@@ -344,7 +346,7 @@ adminApis.post("/sliderImages",upload.array("file"),async(req,res)=>{
         const layout= [];
         if(req.files){
             req.files.map((e)=>{
-                layout.push(`${BASEURL}/profile/${e.filename}`)
+                layout.push(`${BASEURL}profile/${e.filename}`)
             })
             const updateSlider = await Admin.findOneAndUpdate({email:"admin"},{$set:{layout:layout}},{new:true});
             if(updateSlider)

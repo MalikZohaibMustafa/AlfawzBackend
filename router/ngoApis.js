@@ -2,8 +2,6 @@ const express = require("express");
 const ngo = express();
 const ngoApis = express.Router();
 const Ngos = require("../models/ngoSchema");
-const { BASEURL } = require("../urls");
-
 const multer = require("multer");
 const path = require("path");
 const Joi = require("joi");
@@ -14,6 +12,7 @@ const { v4: uuidv4 } = require('uuid');
 const Projects = require("../models/projectSchema");
 const Users = require("../models/volunteerSchema");
 const Admin = require("../models/adminSchema");
+const { BASEURL } = require("../urls");
 
 //Methods to get data from frontend
 ngoApis.use(express.json());
@@ -33,7 +32,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 204857600,
+    fileSize: 52428800,//50mb
   },
 });
 ngo.use("/profile", express.static("upload/images/ngoProfile"));
@@ -50,7 +49,7 @@ ngoApis.post("/register", upload.single("certificate"), async (req, res) => {
       description,
       isActive
     } = req.body;
-    const certificate = `${BASEURL}/profile/${req.file.filename}`;
+    const certificate = `${BASEURL}profile/${req.file.filename}`;
     const createUser = new Ngos({
       ngoName: ngoName,
       email: email,
@@ -114,13 +113,13 @@ ngoApis.put("/updateNgo/:id", upload.fields([{
     if (req.files) {
       let updateObj = {};
       if (req.files.coverImage) {
-        updateObj.coverImage = `${BASEURL}/profile/${req.files.coverImage[0].filename}`;
+        updateObj.coverImage = `${BASEURL}profile/${req.files.coverImage[0].filename}`;
       }
       if (req.files.profileImage) {
-        updateObj.profileImage = `${BASEURL}/profile/${req.files.profileImage[0].filename}`;
+        updateObj.profileImage = `${BASEURL}profile/${req.files.profileImage[0].filename}`;
       }
       if (req.files.certificate) {
-        updateObj.certificate = `${BASEURL}/profile/${req.files.certificate[0].filename}`;
+        updateObj.certificate = `${BASEURL}profile/${req.files.certificate[0].filename}`;
       }
       const files = await Ngos.findByIdAndUpdate({ _id: req.params.id }, { $set: updateObj }, { new: true });
       const body = await Ngos.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
@@ -177,13 +176,13 @@ ngoApis.post("/getById/:id", async (req, res) => {
 ngoApis.get("/getAll", async (req, res) => {
   try {
     const project = await Ngos.find({ isActive: true });
-    if (project) {
+    if (project && project.length) {
       res.status(200).send(project);
-      console.log("projects Found")
+      console.log("projects Found");
+    } else {
+      res.status(404).send("No Projects Found");
     }
-    else {
-     // res.status(404).send("No project found");
-    }
+
   }
   catch (error) {
     res.status(400).json({ error: error.message });;
@@ -230,15 +229,13 @@ ngoApis.post("/getVolNgoProjects", async (req, res) => {
           res.status(200).send(vol);
         }
         else {
-          res.status(404).send("No vol")
+          res.status(404).send("No filtered vol")
         }
       }
       else{
-        res.status(404).send("Volunteers Not found")
+        res.status(404).send("No Volunteers found.")
       }
-    } else {
-      //res.status(404).send("No project found for ngo");
-    }
+    } 
   }
   catch (error) {
     res.status(400).json({ error: error.message });;

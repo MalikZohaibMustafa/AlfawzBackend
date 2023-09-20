@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 const { SECRET_KEY } = require("../urls");
 
-
 // User Schema Or Document Structure
 
 const userSchema = mongoose.Schema({
@@ -21,7 +20,7 @@ const userSchema = mongoose.Schema({
         required:true,
     },
     phone:{
-        type:Number,
+        type:String,
         required:true,
     },
     password:{
@@ -37,7 +36,7 @@ const userSchema = mongoose.Schema({
         required:true
     },
     cnic:{
-        type:Number,
+        type:String,
         required:true
     },
     institution:{
