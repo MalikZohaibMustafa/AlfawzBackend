@@ -129,7 +129,8 @@ async function initializeAdminAccount() {
 
   }
 }
-app.listen(() => {
-  console.log(`Server is listening.`)
+const PORT = process.env.PORT || 306; 
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`)
   initializeAdminAccount();
 });
