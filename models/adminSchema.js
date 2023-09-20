@@ -52,6 +52,7 @@ adminSchema.methods.generateToken = async function(){
     let generatedToken = jwt.sign({_id : this.id} , SECRET_KEY);
     this.tokens = this.tokens.concat({token : generatedToken});
     await this.save();
+    console.log("Generated Token:", generatedToken);
     return generatedToken;
     }
     catch(error){
