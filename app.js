@@ -107,7 +107,7 @@ app.get('/auth', authenticate, async (req, res) => {
 //Logout Page
 app.get('/logout', (req, res) => {
   // res.clearCookie("jwt", { path: '/' })
-  res.clearCookie("jwt", { path: '/', secure: true, sameSite: 'None' });
+  res.clearCookie("jwt", { path: '/', secure: true });
   res.status(200).send("User Logged Out");
 })
 //Account Initiate

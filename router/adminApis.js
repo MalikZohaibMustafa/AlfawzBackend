@@ -50,7 +50,7 @@ adminApis.post('/login', async (req, res) => {
                     expires: new Date(Date.now() + 86400000),
                     httpOnly: true,
                     secure: true,
-                    sameSite: 'None'
+                    // sameSite: 'None'
                 })
                 res.status(200).send("LoggedIn");
                 console.log("LoggedIn");
