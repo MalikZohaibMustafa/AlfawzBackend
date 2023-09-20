@@ -80,32 +80,34 @@ app.use('/profile', express.static('upload/images/ngoProfile'));
 app.get("/", (req, res) => {
   res.json("Backend Connected.");
 })
-app.delete("/deleteAll", async (req, res) => {
-  try {
-    const ngo = await Ngos.deleteMany();
-    const volunteer = await Users.deleteMany();
-    const project = await Projects.deleteMany();
-    const admin = await Admin.deleteMany();
-    const reward = await Rewards.deleteMany();
-    if (ngo && reward &&  volunteer && project && admin) {
-      res.status(200).send("All data removed");
-    }
-    else {
-      res.status(404).send("Error deleting All");
-    }
-  }
-  catch (error) {
-    console.log("Internel Server Error");
-    res.status(500).send("Internel Server Error")
-  }
-});
+// app.delete("/deleteAll", async (req, res) => {
+//   try {
+//     const ngo = await Ngos.deleteMany();
+//     const volunteer = await Users.deleteMany();
+//     const project = await Projects.deleteMany();
+//     const admin = await Admin.deleteMany();
+//     const reward = await Rewards.deleteMany();
+//     if (ngo && reward &&  volunteer && project && admin) {
+//       res.status(200).send("All data removed");
+//     }
+//     else {
+//       res.status(404).send("Error deleting All");
+//     }
+//   }
+//   catch (error) {
+//     console.log("Internel Server Error");
+//     res.status(500).send("Internel Server Error")
+//   }
+// });
 
 //Authentication
 app.get('/auth', authenticate, async (req, res) => {
 })
+
 //Logout Page
 app.get('/logout', (req, res) => {
-  res.clearCookie("jwt", { path: '/' })
+  // res.clearCookie("jwt", { path: '/' })
+  res.clearCookie("jwt", { path: '/', secure: true, sameSite: 'None' });
   res.status(200).send("User Logged Out");
 })
 //Account Initiate
