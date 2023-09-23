@@ -165,7 +165,7 @@ rewardApis.put("/uploadCertificate", upload.single("certificate"), async (req, r
     try {
         let rewardId = mongoose.Types.ObjectId(req.body.rewardId);
         const certificate = `${BASEURL}profile/${req.file.filename}`;
-        const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { certificate: certificate });
+const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { $set: certificate }, {new :true});
         if (reward) {
             res.status(200).send("Updated")
         }
