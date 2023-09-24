@@ -29,7 +29,7 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 25048576, 
+        fileSize: 2048570006, // 1 MB in bytes
     },
 });
 reward.use("/profile", express.static("upload/images/ngoProfile"));
@@ -160,39 +160,26 @@ rewardApis.get("/pointsRequest", async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
-
 rewardApis.put("/uploadCertificate", upload.single("certificate"), async (req, res) => {
     try {
-         let responce = false
-         // Point 3: Error Handling in Backend
-        if (req.files) {
-        // Point 4: Log `req.file` in Backend
-        console.log("logfile: ",req.file);
+
         let rewardId = mongoose.Types.ObjectId(req.body.rewardId);
         const certificate = `${BASEURL}profile/${req.file.filename}`;
-const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { $set: { certificate: certificate } }, {new :true});
+        const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { certificate: certificate }, { new: true });
         if (reward) {
-            res.status(200).send("Updated")
+            console.log("Reward updated successfully");
+            res.status(200).send("Updated");
         }
         else {
-            res.status(400).send("Bad Request")
+            console.log("Reward update failed");
+            res.status(400).send("Bad Request");
         }
-        }
-         else if (req.body) {
-      ngo = await Ngos.findByIdAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true });
-      responce = true;
-    }
-      if (responce) {
-      const updatedNgo = await Ngos.findById(req.params.id);
-      res.status(200).send(updatedNgo);
-      console.log("Certificate Uploaded")
-    } else {
-      res.status(404).send("Ngo Not Found");
-    }
     } catch (error) {
+        console.log("Error caught:", error.message);
         res.status(400).json({ error: error.message });
     }
 });
+
 
 rewardApis.post("/rejectRequest", async (req, res) => {
     try {
