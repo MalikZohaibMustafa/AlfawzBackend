@@ -29,7 +29,7 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 2048570006, // 1 MB in bytes
+        fileSize: 25048576, 
     },
 });
 reward.use("/profile", express.static("upload/images/ngoProfile"));
@@ -163,6 +163,13 @@ rewardApis.get("/pointsRequest", async (req, res) => {
 
 rewardApis.put("/uploadCertificate", upload.single("certificate"), async (req, res) => {
     try {
+         // Point 3: Error Handling in Backend
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+
+        // Point 4: Log `req.file` in Backend
+        console.log("logfile: ",req.file);
         let rewardId = mongoose.Types.ObjectId(req.body.rewardId);
         const certificate = `${BASEURL}profile/${req.file.filename}`;
 const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { $set: certificate }, {new :true});
