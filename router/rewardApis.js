@@ -163,22 +163,32 @@ rewardApis.get("/pointsRequest", async (req, res) => {
 
 rewardApis.put("/uploadCertificate", upload.single("certificate"), async (req, res) => {
     try {
+         let responce = false
          // Point 3: Error Handling in Backend
-        if (!req.file) {
-            return res.status(400).json({ error: "No file uploaded" });
-        }
-
+        if (req.files) {
         // Point 4: Log `req.file` in Backend
         console.log("logfile: ",req.file);
         let rewardId = mongoose.Types.ObjectId(req.body.rewardId);
         const certificate = `${BASEURL}profile/${req.file.filename}`;
-const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { $set: certificate }, {new :true});
+const reward = await Rewards.findByIdAndUpdate({ _id: rewardId }, { $set: { certificate: certificate } }, {new :true});
         if (reward) {
             res.status(200).send("Updated")
         }
         else {
             res.status(400).send("Bad Request")
         }
+        }
+         else if (req.body) {
+      ngo = await Ngos.findByIdAndUpdate({ _id: req.params.id }, { $set: req.body }, { new: true });
+      responce = true;
+    }
+      if (responce) {
+      const updatedNgo = await Ngos.findById(req.params.id);
+      res.status(200).send(updatedNgo);
+      console.log("Certificate Uploaded")
+    } else {
+      res.status(404).send("Ngo Not Found");
+    }
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
