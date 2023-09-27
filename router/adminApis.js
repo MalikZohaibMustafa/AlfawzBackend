@@ -297,7 +297,7 @@ adminApis.put("/updateCategory", async (req, res) => {
     try {
       const { category } = req.body;
       const update = await Admin.findOneAndUpdate(
-        { email: "admin" },
+        { email: "saimajawad@gmail.com" },
         { $push: { serviceCategory: category } },
         { upsert: true }
       );s
@@ -315,7 +315,7 @@ adminApis.put("/updateCategory", async (req, res) => {
 adminApis.post("/deleteCategory", async (req, res) => {
     try {
         const { category } = req.body
-        const update = await Admin.findOneAndUpdate({ email: "admin" }, { $pull: { serviceCategory: category } }, { upsert: true });
+        const update = await Admin.findOneAndUpdate({ email: "saimajawad@gmail.com" }, { $pull: { serviceCategory: category } }, { upsert: true });
         if (update) {
             res.status(200).send(update);
         }
@@ -331,7 +331,7 @@ adminApis.put("/updateMission", upload.single("image"), async (req, res) => {
     try {
         const { mission, description } = req.body;
         const image = `${BASEURL}profile/${req.file.filename}`;
-        const update = await Admin.findOneAndUpdate({ email: "admin" }, { image: image, mission: mission, description: description }, { new: true });
+        const update = await Admin.findOneAndUpdate({ email: "saimajawad@gmail.com" }, { image: image, mission: mission, description: description }, { new: true });
         if (update) {
             res.status(200).send("Updated")
         }
@@ -350,7 +350,7 @@ adminApis.post("/sliderImages",upload.array("file"),async(req,res)=>{
             req.files.map((e)=>{
                 layout.push(`${BASEURL}profile/${e.filename}`)
             })
-            const updateSlider = await Admin.findOneAndUpdate({email:"admin"},{$set:{layout:layout}},{new:true});
+            const updateSlider = await Admin.findOneAndUpdate({email:"saimajawad@gmail.com"},{$set:{layout:layout}},{new:true});
             if(updateSlider)
             {
                 res.status(200).json({
@@ -372,7 +372,7 @@ adminApis.post("/sliderImages",upload.array("file"),async(req,res)=>{
 
 adminApis.get("/getSlider",async(req,res)=>{
     try {
-        const response = await Admin.find({email:"admin"});
+        const response = await Admin.find({email:"saimajawad@gmail.com"});
         if(response){
             res.status(200).json({
                 success : "true",
