@@ -295,21 +295,34 @@ adminApis.get("/about", async (req, res) => {
 
 adminApis.put("/updateCategory", async (req, res) => {
     try {
-      const { category } = req.body;
-      const update = await Admin.findOneAndUpdate(
-        { email: "saimajawad@gmail.com" },
-        { $push: { serviceCategory: category } },
-        { upsert: true }
-      );s
-      if (update) {
-        res.status(200).send(update);
-      } else {
-        res.status(400).send("Bad Request");
-      }
+        const { category } = req.body;
+        const adminData = await Admin.findOne({ email: "saimajawad@gmail.com" });
+
+        if (adminData) {
+            // Check if category already exists
+            if (adminData.serviceCategory.includes(category)) {
+                return res.status(400).send("Category already exists!");
+            }
+
+            const update = await Admin.findOneAndUpdate(
+                { email: "saimajawad@gmail.com" },
+                { $push: { serviceCategory: category } },
+                { upsert: true }
+            );
+
+            if (update) {
+                res.status(200).send(update);
+            } else {
+                res.status(400).send("Bad Request");
+            }
+        } else {
+            res.status(404).send("Admin not found");
+        }
+
     } catch (error) {
-      res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message });
     }
-  });
+});
   
 
 adminApis.post("/deleteCategory", async (req, res) => {
