@@ -7,12 +7,12 @@ const { SECRET_KEY } = require("../urls");
 const adminSchema = mongoose.Schema({
     email : {
         type : String,
-        default:"admin",
+        default:"saimajawad@gmail.com",
         unique : true
     },
     password:{
         type:String,
-        default:"complicated"
+        default:"kirmani@22B"
     },
     mission :{
         type:String,
