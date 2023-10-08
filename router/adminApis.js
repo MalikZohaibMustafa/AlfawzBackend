@@ -343,8 +343,26 @@ adminApis.post("/deleteCategory", async (req, res) => {
 adminApis.put("/updateMission", upload.single("image"), async (req, res) => {
     try {
         const { mission, description } = req.body;
-        const image = `${BASEURL}profile/${req.file.filename}`;
-        const update = await Admin.findOneAndUpdate({ email: "saimajawad@gmail.com" }, { image: image, mission: mission, description: description }, { new: true });
+
+        let updateFields = {}; // Object to hold fields to be updated
+
+        // Check if image is provided and update accordingly
+        if (req.file && req.file.filename) {
+            updateFields.image = `${BASEURL}profile/${req.file.filename}`;
+        }
+
+        // Check if mission is provided and update accordingly
+        if (mission !== undefined) {
+            updateFields.mission = mission;
+        }
+
+        // Check if description is provided and update accordingly
+        if (description !== undefined) {
+            updateFields.description = description;
+        }
+
+        const update = await Admin.findOneAndUpdate({ email: "saimajawad@gmail.com" }, updateFields, { new: true });
+
         if (update) {
             res.status(200).send("Updated")
         }
@@ -352,9 +370,10 @@ adminApis.put("/updateMission", upload.single("image"), async (req, res) => {
             res.status(400).send("Bad Request")
         }
     } catch (error) {
-        res.status(400).json({ error: error.message });;
+        res.status(400).json({ error: error.message });
     }
 });
+
 
 adminApis.post("/sliderImages",upload.array("file"),async(req,res)=>{
     try {
